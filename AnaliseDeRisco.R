@@ -128,6 +128,25 @@ par(mfrow = c(1,2))
 plot.roc.curve(predictions, title.text = "Curva ROC")
 plot.pr.curve(predictions, title.text = "Curva Precision/Recall")
 
+# Trocando o Algoritmo - Arvore de decisão com RandomForest
+
+modelo <- randomForest(credit.rating ~ account.balance 
+                       + credit.purpose 
+                       + previous.credit.payment.status 
+                       + savings + credit.duration.months,
+                       data = train.data,
+                       ntree = 100, 
+                       nodesize = 10)
+# Imprimindo o resultado
+print(modelo)
+
+# Gerando as previsões
+avaliacao <- predict(modelo, test.data, type = "response")
+
+# Avaliando o Resultado do Modelo
+confusionMatrix(table(data=avaliacao, reference=test.class.var), positive='1')
+
+
 
 
 
