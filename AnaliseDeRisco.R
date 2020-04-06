@@ -101,7 +101,32 @@ lr.predictions <- round(lr.predictions)
 # Confusion Matrix
 confusionMatrix(table(data = lr.predictions, reference = test.class.var), positive = '1')
 
+# Construindo o modelo com as variáveis selecionadas
+formula.new <- "credit.rating ~ account.balance +
+credit.purpose + previous.credit.payment.status
++ savings + credit.duration.months"
+formula.new <- as.formula(formula.new)
+lr.model.new <- glm(formula = formula.new, data = train.data, family = "binomial")
 
+# Visualizando o modelo
+summary(lr.model.new)
+
+# Testando o modelo nos dados de teste
+lr.predictions.new <- predict(lr.model.new, test.data, type="response") 
+lr.predictions.new <- round(lr.predictions.new)
+
+# Avaliando o modelo
+confusionMatrix(table(data=lr.predictions.new, reference=test.class.var), positive='1')
+
+# Curva ROC e Avaliação do Modelo Final
+
+# Criando curvas ROC
+lr.model.best <- lr.model
+lr.prediction.values <- predict(lr.model.best, test.feature.vars, type = "response")
+predictions <- prediction(lr.prediction.values, test.class.var)
+par(mfrow = c(1,2))
+plot.roc.curve(predictions, title.text = "Curva ROC")
+plot.pr.curve(predictions, title.text = "Curva Precision/Recall")
 
 
 
