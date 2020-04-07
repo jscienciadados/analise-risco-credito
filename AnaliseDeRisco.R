@@ -143,8 +143,36 @@ print(modelo)
 # Gerando as previsões
 avaliacao <- predict(modelo, test.data, type = "response")
 
-# Avaliando o Resultado do Modelo
+# Avaliando o Resultado do Modelo - 72%
 confusionMatrix(table(data=avaliacao, reference=test.class.var), positive='1')
+
+# Criando modelo com todas as variaveis 
+modelo_v2 <- randomForest(credit.rating ~ ., data = train.data, ntree = 100, nodesize = 10)
+print(modelo_v2)
+
+# Previsão
+avaliacao2 <- predict(modelo_v2, test.data, type = "response")
+View(avaliacao2)
+
+# Matriz de confusão - 75%
+confusionMatrix(table(data =avaliacao2, reference = test.class.var), positive = '1')
+
+# Usando um Conjunto de variaveis mais importante
+modelo_v3 <- randomForest(credit.rating ~  account.balance
+                          + previous.credit.payment.status
+                          + credit.duration.months
+                          + savings
+                          + credit.amount
+                          + other.credits,
+                          data = train.data,
+                          ntree = 100,
+                          nodesize = 10)
+
+# Gerando as previsões
+avaliacao <- predict(modelo_v3, test.data, type = "response")
+
+# Matriz de confusão - 75,3%
+confusionMatrix(table(data =avaliacao, reference = test.class.var), positive = '1')
 
 
 
