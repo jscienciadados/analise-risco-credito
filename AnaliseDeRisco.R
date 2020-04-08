@@ -174,6 +174,15 @@ avaliacao <- predict(modelo_v3, test.data, type = "response")
 # Matriz de confusão - 75,3%
 confusionMatrix(table(data =avaliacao, reference = test.class.var), positive = '1')
 
+# Modelo support vector machine
+library(e1071)
+model_svm <- svm(credit.rating ~ ., data = train.data)
+summary(model_svm)
+
+# Teste
+teste <- predict(model_svm, test.data)
+confusionMatrix(table(data = teste, reference = test.class.var), positive = '1')
+
 
 
 
